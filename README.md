@@ -22,7 +22,7 @@ Proyek ini adalah contoh aplikasi Spring Boot yang mengimplementasikan autentika
 1.  Clone repositori ini:
 
     ```bash
-    git clone 
+    git clone https://github.com/viditry/jwtspringboots.git
     ```
 
 2.  Buka proyek di IDE Anda.
