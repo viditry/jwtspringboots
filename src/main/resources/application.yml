@@ -1,0 +1,39 @@
+server:
+  port: 8012 # Port aplikasi
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/carwash # URL database PostgreSQL
+    username: postgres # Username database
+    password: admin # Password database
+    driver-class-name: org.postgresql.Driver # Driver database PostgreSQL\
+
+  jpa:
+    hibernate:
+      ddl-auto: update # Mengupdate skema database secara otomatis
+    show-sql: true # Menampilkan query SQL di konsol
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect # Dialek Hibernate untuk PostgreSQL
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080 # URI penerbit JWT (ganti sesuai kebutuhan)
+  application:
+    name: jwtspringboot
+
+jwt:
+  secret: Kmi7oHVHyZ35KYEDatmO0jZ5SRuuhJLAcwsQycsgF8g= # Kunci rahasia JWT (ganti dengan kunci yang lebih aman)
+  expiration: 3600000 # Waktu kedaluwarsa token JWT (dalam milidetik)
+
+logging:
+  level:
+    root: INFO # Level logging root
+    com.demo: DEBUG # Level logging untuk package com.example
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info
