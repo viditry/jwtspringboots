@@ -12,11 +12,24 @@
 <body>
 <div id="app">
     <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Vue 2.6 Shop</a>
-            <button class="btn btn-outline-light" @click="toggleCart">
-                <i class="fas fa-shopping-cart"></i> Cart ({{ cartItems.length }})
-            </button>
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="#">Set Dah Shop</a>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-outline-light mr-2" @click="toggleCart">
+                    <i class="fas fa-shopping-cart"></i> Cart ({{ cartItems.length }})
+                </button>
+
+                <!-- User dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i> User
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="#" @click.prevent="login">Login</a>
+                        <a class="dropdown-item" href="#" @click.prevent="logout">Logout</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -38,7 +51,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="priceRange">Max Price:</label>
+                            <label for="priceRange">Max Price: {{ maxPrice }}</label>
                             <input type="range" class="form-control-range" id="priceRange"
                                    v-model="maxPrice" min="0" max="1000">
                         </div>
@@ -73,6 +86,7 @@
                                         Add to Cart
                                     </button>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -99,7 +113,7 @@
                                 v-for="(item, index) in cartItems" :key="index">
                                 <div>
                                     <h6 class="my-0">{{ item.name }}</h6>
-                                    <small class="text-muted"> b{{ item.price.toFixed(2) }}</small>
+                                    <small class="text-muted">{ item.price.toFixed(2) }</small>
                                 </div>
                                 <button class="btn btn-sm btn-danger" @click="removeFromCart(index)">
                                     &times;
@@ -135,53 +149,54 @@
       el: '#app',
       data: {
         products: [
+            // Sample product data
           {
-            id: 1,
-            name: 'Laptop',
-            description: 'High-performance laptop with 16GB RAM',
-            price: 899.99,
-            image: 'https://via.placeholder.com/300x200?text=Laptop',
-            category: 'Electronics'
+            "id": 1,
+            "name": "Laptop",
+            "description": "High-performance laptop with 16GB RAM",
+            "price": 899.99,
+            "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80",
+            "category": "Electronics"
           },
           {
-            id: 2,
-            name: 'Smartphone',
-            description: 'Latest model with advanced camera',
-            price: 699.99,
-            image: 'https://via.placeholder.com/300x200?text=Smartphone',
-            category: 'Electronics'
+            "id": 2,
+            "name": "Smartphone",
+            "description": "Latest model with advanced camera",
+            "price": 699.99,
+            "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80",
+            "category": "Electronics"
+          },
+         {
+            "id": 3,
+            "name": "Headphones",
+            "description": "Noise-cancelling wireless headphones",
+            "price": 199.99,
+            "image": "https://images.unsplash.com/photo-1511367461989-f85a21fda167",
+            "category": "Audio"
           },
           {
-            id: 3,
-            name: 'Headphones',
-            description: 'Noise-cancelling wireless headphones',
-            price: 199.99,
-            image: 'https://via.placeholder.com/300x200?text=Headphones',
-            category: 'Audio'
+            "id": 4,
+            "name": "Coffee Maker",
+            "description": "Programmable coffee maker with timer",
+            "price": 79.99,
+            "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
+            "category": "Home"
           },
           {
-            id: 4,
-            name: 'Coffee Maker',
-            description: 'Programmable coffee maker with timer',
-            price: 79.99,
-            image: 'https://via.placeholder.com/300x200?text=Coffee+Maker',
-            category: 'Home'
+            "id": 5,
+            "name": "Fitness Watch",
+            "description": "Track your workouts and heart rate",
+            "price": 149.99,
+            "image": "https://m.media-amazon.com/images/I/61dV494jBgL._AC_UF1000%2C1000_QL80_.jpg",
+            "category": "Wearables"
           },
-          {
-            id: 5,
-            name: 'Fitness Watch',
-            description: 'Track your workouts and heart rate',
-            price: 149.99,
-            image: 'https://via.placeholder.com/300x200?text=Fitness+Watch',
-            category: 'Wearables'
-          },
-          {
-            id: 6,
-            name: 'Desk Chair',
-            description: 'Ergonomic office chair with lumbar support',
-            price: 249.99,
-            image: 'https://via.placeholder.com/300x200?text=Desk+Chair',
-            category: 'Furniture'
+         {
+            "id": 6,
+            "name": "Desk Chair",
+            "description": "Ergonomic office chair with lumbar support",
+            "price": 249.99,
+            "image": "https://m.media-amazon.com/images/I/716tq9Y8WOL._AC_UF894%2C1000_QL80_.jpg",
+            "category": "Furniture"
           }
         ],
         cartItems: [],
@@ -213,10 +228,20 @@
         }
       },
       methods: {
+        login() {
+          alert('Redirecting to login...');
+          // Redirect logic here
+          window.location.href = '/login'; // Adjust this as needed
+        },
+        logout() {
+          alert('Logging out...');
+          // Logout logic here
+          window.location.href = '/login'; // Adjust this as needed
+        },
         addToCart(product) {
           this.cartItems.push(product);
           this.showAlert = true;
-          this.alertMessage = `${product.name} added to cart!`;
+          this.alertMessage = `{product.name} added to cart!`;
 
           // Auto-hide alert after 3 seconds
           setTimeout(() => {

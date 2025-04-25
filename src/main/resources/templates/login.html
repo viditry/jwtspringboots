@@ -203,18 +203,18 @@
 
                 <form @submit.prevent="submitForm">
                     <div class="form-group mb-3">
-                        <label for="email" class="form-label">Email</label>
+                        <label for="username" class="form-label">Username</label>
                         <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
                             <input
-                                    type="email"
+                                    type="text"
                                     class="form-control"
-                                    id="email"
-                                    placeholder="Enter your email"
-                                    v-model="form.email"
-                                    :class="{'is-invalid': errors.email}"
+                                    id="username"
+                                    placeholder="Enter your username"
+                                    v-model="form.username"
+                                    :class="{'is-invalid': errors.username}"
                             >
-                            <div class="invalid-feedback" v-if="errors.email">{{ errors.email }}</div>
+                            <div class="invalid-feedback" v-if="errors.username">{{ errors.username }}</div>
                         </div>
                     </div>
 
@@ -288,18 +288,19 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
     new Vue({
       el: '#app',
       data: {
         form: {
-          email: '',
+          username: '',
           password: '',
           rememberMe: false
         },
         errors: {
-          email: '',
+          username: '',
           password: ''
         },
         isSubmitting: false,
@@ -310,16 +311,13 @@
         validateForm() {
           let isValid = true;
           this.errors = {
-            email: '',
+            username: '',
             password: ''
           };
 
           // Email validation
-          if (!this.form.email) {
-            this.errors.email = 'Email is required';
-            isValid = false;
-          } else if (!/^\S+@\S+\.\S+$/.test(this.form.email)) {
-            this.errors.email = 'Please enter a valid email address';
+          if (!this.form.username) {
+            this.errors.username = 'username is required';
             isValid = false;
           }
 
@@ -338,18 +336,35 @@
           if (this.validateForm()) {
             this.isSubmitting = true;
 
-            // Simulate API call
-            setTimeout(() => {
+            axios.post('http://localhost:8012/authenticate', {
+              username: this.form.username,
+              password: this.form.password
+            }, {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => {
               this.isSubmitting = false;
               this.loginSuccess = true;
 
-              // Simulate redirect after successful login
+              // Simulasi delay dan redirect ke halaman lain
               setTimeout(() => {
-                alert('Login successful! In a real app, you would be redirected to the dashboard.');
+                // Ganti dengan URL dashboard tujuanmu
+                window.location.href = 'http://localhost:8012/index';
               }, 1500);
-            }, 1000);
+            })
+            .catch(error => {
+              this.isSubmitting = false;
+              if (error.response && error.response.status === 401) {
+                this.errors.password = 'Invalid username or password';
+              } else {
+                alert('Login failed. Please try again later.');
+              }
+            });
           }
         }
+
       }
     });
 </script>
