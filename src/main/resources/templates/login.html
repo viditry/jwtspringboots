@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BYD Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #f8f9fa;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          padding: 20px 0;
+        }
+
+        .login-container {
+          max-width: 1000px;
+          width: 100%;
+          background-color: white;
+          border-radius: 20px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+          margin: 20px;
+        }
+
+        .logo-container {
+          text-align: center;
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
+
+        .byd-logo {
+          font-weight: 800;
+          font-size: 2.5rem;
+          color: #0072ce; /* BYD blue */
+          letter-spacing: 2px;
+        }
+
+        .tagline {
+          font-size: 1rem;
+          color: #666;
+          margin-top: -5px;
+        }
+
+        .car-container {
+          text-align: center;
+          padding: 20px;
+          position: relative;
+        }
+
+        .car-image {
+          max-width: 100%;
+          height: auto;
+          border-radius: 10px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .eco-badge {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background-color: #4caf50;
+          color: white;
+          padding: 5px 15px;
+          border-radius: 20px;
+          font-size: 14px;
+          font-weight: bold;
+          box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-form-container {
+          display: flex;
+          justify-content: center;
+        }
+
+        .login-form {
+          padding: 30px;
+          background-color: rgba(255, 255, 255, 0.9);
+          border-radius: 15px;
+          margin-top: -30px;
+          position: relative;
+          z-index: 10;
+          box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+          width: 100%;
+          max-width: 500px;
+        }
+
+        .form-control:focus {
+          border-color: #0072ce;
+          box-shadow: 0 0 0 0.25rem rgba(0, 114, 206, 0.25);
+        }
+
+        .btn-byd {
+          background-color: #0072ce;
+          border-color: #0072ce;
+          color: white;
+          padding: 10px 20px;
+          font-weight: 600;
+          border-radius: 30px;
+          transition: all 0.3s ease;
+        }
+
+        .btn-byd:hover:not(:disabled),
+        .btn-byd:focus:not(:disabled) {
+          background-color: #005baa;
+          border-color: #005baa;
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-byd:disabled {
+          background-color: #0072ce;
+          border-color: #0072ce;
+          opacity: 0.7;
+        }
+
+        .form-check-input:checked {
+          background-color: #0072ce;
+          border-color: #0072ce;
+        }
+
+        .byd-text {
+          color: #0072ce;
+        }
+
+        .form-label {
+          font-weight: 500;
+          color: #003459;
+        }
+
+        .input-group-text {
+          background-color: #0072ce;
+          color: white;
+          border-color: #0072ce;
+        }
+
+        .battery-indicator {
+          display: inline-block;
+          width: 50px;
+          height: 20px;
+          background: #eee;
+          border: 2px solid #ccc;
+          border-radius: 3px;
+          margin-left: 10px;
+          position: relative;
+          top: 4px;
+          overflow: hidden;
+        }
+
+        .battery-level {
+          height: 100%;
+          background: #4caf50;
+          transition: width 1s ease;
+        }
+
+        .battery-cap {
+          position: absolute;
+          width: 5px;
+          height: 10px;
+          background: #ccc;
+          right: -5px;
+          top: 3px;
+          border-radius: 0 3px 3px 0;
+        }
+
+        @media (max-width: 768px) {
+          .login-form {
+            margin-top: -20px;
+            padding: 20px;
+          }
+
+          .byd-logo {
+            font-size: 2rem;
+          }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="login-container">
+        <div class="logo-container">
+            <div class="byd-logo">BYD</div>
+            <p class="tagline">Build Your Dreams</p>
+        </div>
+
+        <div class="car-container">
+            <!-- Replace with actual BYD car image -->
+            <img src="https://placeholder.svg?height=200&width=400&text=BYD+Electric+Car" alt="BYD Electric Car" class="car-image">
+            <div class="eco-badge">
+                <i class="fas fa-leaf me-1"></i> ECO
+            </div>
+        </div>
+
+        <div class="login-form-container">
+            <div class="login-form">
+                <h4 class="text-center mb-4">Login to Your BYD Account</h4>
+
+                <form @submit.prevent="submitForm">
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email"
+                                    placeholder="Enter your email"
+                                    v-model="form.email"
+                                    :class="{'is-invalid': errors.email}"
+                            >
+                            <div class="invalid-feedback" v-if="errors.email">{{ errors.email }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input
+                                    type="password"
+                                    class="form-control"
+                                    id="password"
+                                    placeholder="Enter your password"
+                                    v-model="form.password"
+                                    :class="{'is-invalid': errors.password}"
+                            >
+                            <div class="invalid-feedback" v-if="errors.password">{{ errors.password }}</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <div class="form-check">
+                            <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="rememberMe"
+                                    v-model="form.rememberMe"
+                            >
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <a href="#" class="text-decoration-none byd-text">Forgot password?</a>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button
+                                type="submit"
+                                class="btn btn-byd"
+                                :disabled="isSubmitting"
+                        >
+                <span v-if="isSubmitting">
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Loading...
+                </span>
+                            <span v-else>
+                  <i class="fas fa-bolt me-2"></i>Login
+                </span>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0">Don't have an account? <a href="#" class="text-decoration-none byd-text">Sign up</a></p>
+                    <p class="mt-2 mb-0 text-muted small">
+                        <i class="fas fa-battery-three-quarters me-1"></i>
+                        Battery Status
+                        <span class="battery-indicator">
+                <span class="battery-level" :style="{ width: batteryLevel + '%' }"></span>
+                <span class="battery-cap"></span>
+              </span>
+                    </p>
+                </div>
+
+                <div v-if="loginSuccess" class="alert alert-success mt-3">
+                    Login successful! Redirecting...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Vue.js -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    new Vue({
+      el: '#app',
+      data: {
+        form: {
+          email: '',
+          password: '',
+          rememberMe: false
+        },
+        errors: {
+          email: '',
+          password: ''
+        },
+        isSubmitting: false,
+        loginSuccess: false,
+        batteryLevel: 80
+      },
+      methods: {
+        validateForm() {
+          let isValid = true;
+          this.errors = {
+            email: '',
+            password: ''
+          };
+
+          // Email validation
+          if (!this.form.email) {
+            this.errors.email = 'Email is required';
+            isValid = false;
+          } else if (!/^\S+@\S+\.\S+$/.test(this.form.email)) {
+            this.errors.email = 'Please enter a valid email address';
+            isValid = false;
+          }
+
+          // Password validation
+          if (!this.form.password) {
+            this.errors.password = 'Password is required';
+            isValid = false;
+          } else if (this.form.password.length < 6) {
+            this.errors.password = 'Password must be at least 6 characters';
+            isValid = false;
+          }
+
+          return isValid;
+        },
+        submitForm() {
+          if (this.validateForm()) {
+            this.isSubmitting = true;
+
+            // Simulate API call
+            setTimeout(() => {
+              this.isSubmitting = false;
+              this.loginSuccess = true;
+
+              // Simulate redirect after successful login
+              setTimeout(() => {
+                alert('Login successful! In a real app, you would be redirected to the dashboard.');
+              }, 1500);
+            }, 1000);
+          }
+        }
+      }
+    });
+</script>
+</body>
+</html>

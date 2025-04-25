@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 2.6 with Bootstrap</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Vue 2.6 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Vue 2.6 Shop</a>
+            <button class="btn btn-outline-light" @click="toggleCart">
+                <i class="fas fa-shopping-cart"></i> Cart ({{ cartItems.length }})
+            </button>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Alert message -->
+        <div class="alert alert-success" v-if="showAlert">
+            {{ alertMessage }}
+            <button type="button" class="close" @click="showAlert = false">
+                <span>&times;</span>
+            </button>
+        </div>
+
+        <div class="row">
+            <!-- Product filters -->
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="priceRange">Max Price:</label>
+                            <input type="range" class="form-control-range" id="priceRange"
+                                   v-model="maxPrice" min="0" max="1000">
+                        </div>
+                        <div class="form-group">
+                            <label>Categories</label>
+                            <div class="form-check" v-for="category in categories" :key="category">
+                                <input class="form-check-input" type="checkbox"
+                                       :id="category"
+                                       :value="category"
+                                       v-model="selectedCategories">
+                                <label class="form-check-label" :for="category">
+                                    {{ category }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product listing -->
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-4 mb-4" v-for="product in filteredProducts" :key="product.id">
+                        <div class="card h-100">
+                            <img class="card-img-top" :src="product.image" :alt="product.name">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-primary font-weight-bold">{{ product.price.toFixed(2) }}</span>
+                                    <button class="btn btn-sm btn-outline-primary" @click="addToCart(product)">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shopping Cart Modal -->
+        <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-hidden="true" v-if="showCartModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Shopping Cart</h5>
+                        <button type="button" class="close" @click="showCartModal = false">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-if="cartItems.length === 0" class="text-center py-3">
+                            Your cart is empty
+                        </div>
+                        <ul class="list-group" v-else>
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                v-for="(item, index) in cartItems" :key="index">
+                                <div>
+                                    <h6 class="my-0">{{ item.name }}</h6>
+                                    <small class="text-muted"> b{{ item.price.toFixed(2) }}</small>
+                                </div>
+                                <button class="btn btn-sm btn-danger" @click="removeFromCart(index)">
+                                    &times;
+                                </button>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Total (USD)</span>
+                                <strong>{{ cartTotal.toFixed(2) }}</strong>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="showCartModal = false">Close</button>
+                        <button type="button" class="btn btn-primary" @click="checkout" :disabled="cartItems.length === 0">
+                            Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<script>
+    new Vue({
+      el: '#app',
+      data: {
+        products: [
+          {
+            id: 1,
+            name: 'Laptop',
+            description: 'High-performance laptop with 16GB RAM',
+            price: 899.99,
+            image: 'https://via.placeholder.com/300x200?text=Laptop',
+            category: 'Electronics'
+          },
+          {
+            id: 2,
+            name: 'Smartphone',
+            description: 'Latest model with advanced camera',
+            price: 699.99,
+            image: 'https://via.placeholder.com/300x200?text=Smartphone',
+            category: 'Electronics'
+          },
+          {
+            id: 3,
+            name: 'Headphones',
+            description: 'Noise-cancelling wireless headphones',
+            price: 199.99,
+            image: 'https://via.placeholder.com/300x200?text=Headphones',
+            category: 'Audio'
+          },
+          {
+            id: 4,
+            name: 'Coffee Maker',
+            description: 'Programmable coffee maker with timer',
+            price: 79.99,
+            image: 'https://via.placeholder.com/300x200?text=Coffee+Maker',
+            category: 'Home'
+          },
+          {
+            id: 5,
+            name: 'Fitness Watch',
+            description: 'Track your workouts and heart rate',
+            price: 149.99,
+            image: 'https://via.placeholder.com/300x200?text=Fitness+Watch',
+            category: 'Wearables'
+          },
+          {
+            id: 6,
+            name: 'Desk Chair',
+            description: 'Ergonomic office chair with lumbar support',
+            price: 249.99,
+            image: 'https://via.placeholder.com/300x200?text=Desk+Chair',
+            category: 'Furniture'
+          }
+        ],
+        cartItems: [],
+        showCartModal: false,
+        maxPrice: 1000,
+        categories: ['Electronics', 'Audio', 'Home', 'Wearables', 'Furniture'],
+        selectedCategories: [],
+        showAlert: false,
+        alertMessage: ''
+      },
+      computed: {
+        filteredProducts() {
+          return this.products.filter(product => {
+            // Filter by price
+            if (product.price > this.maxPrice) {
+              return false;
+            }
+
+            // Filter by category
+            if (this.selectedCategories.length > 0 && !this.selectedCategories.includes(product.category)) {
+              return false;
+            }
+
+            return true;
+          });
+        },
+        cartTotal() {
+          return this.cartItems.reduce((total, item) => total + item.price, 0);
+        }
+      },
+      methods: {
+        addToCart(product) {
+          this.cartItems.push(product);
+          this.showAlert = true;
+          this.alertMessage = `${product.name} added to cart!`;
+
+          // Auto-hide alert after 3 seconds
+          setTimeout(() => {
+            this.showAlert = false;
+          }, 3000);
+        },
+        removeFromCart(index) {
+          this.cartItems.splice(index, 1);
+        },
+        toggleCart() {
+          this.showCartModal = !this.showCartModal;
+
+          // Use Bootstrap's jQuery modal if needed
+          if (this.showCartModal) {
+            $('#cartModal').modal('show');
+          } else {
+            $('#cartModal').modal('hide');
+          }
+        },
+        checkout() {
+          alert('Checkout functionality would go here in a real application');
+          this.cartItems = [];
+          this.showCartModal = false;
+        }
+      }
+    });
+</script>
+</body>
+</html>

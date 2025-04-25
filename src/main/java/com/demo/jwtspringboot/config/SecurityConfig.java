@@ -33,8 +33,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Menggunakan konfigurasi CSRF yang baru
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/authenticate").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/index").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/hello").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
