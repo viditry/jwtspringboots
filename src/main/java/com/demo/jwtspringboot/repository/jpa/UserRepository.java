@@ -1,4 +1,4 @@
-package com.demo.jwtspringboot.repository;
+package com.demo.jwtspringboot.repository.jpa;
 
 import com.demo.jwtspringboot.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -191,7 +191,7 @@
 
         <div class="car-container">
             <!-- Replace with actual BYD car image -->
-            <img src="https://placeholder.svg?height=200&width=400&text=BYD+Electric+Car" alt="BYD Electric Car" class="car-image">
+            <img src="https://electrek.co/wp-content/uploads/sites/3/2025/04/BYD-EVs-ultra-fast-charging.jpeg?quality=82&strip=all" alt="BYD Electric Car" class="car-image">
             <div class="eco-badge">
                 <i class="fas fa-leaf me-1"></i> ECO
             </div>
@@ -291,82 +291,98 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-    new Vue({
-      el: '#app',
-      data: {
-        form: {
-          username: '',
-          password: '',
-          rememberMe: false
-        },
-        errors: {
-          username: '',
-          password: ''
-        },
-        isSubmitting: false,
-        loginSuccess: false,
-        batteryLevel: 80
-      },
-      methods: {
-        validateForm() {
-          let isValid = true;
-          this.errors = {
-            username: '',
-            password: ''
-          };
 
-          // Email validation
-          if (!this.form.username) {
-            this.errors.username = 'username is required';
-            isValid = false;
-          }
+        new Vue({
+          el: '#app',
+          data: {
+            form: {
+              username: '',
+              password: '',
+              rememberMe: false
+            },
+            errors: {
+              username: '',
+              password: ''
+            },
+            isSubmitting: false,
+            loginSuccess: false,
+            batteryLevel: 80
+          },
+          methods: {
 
-          // Password validation
-          if (!this.form.password) {
-            this.errors.password = 'Password is required';
-            isValid = false;
-          } else if (this.form.password.length < 6) {
-            this.errors.password = 'Password must be at least 6 characters';
-            isValid = false;
-          }
+            getContextPath() {
+                if (typeof document !== 'undefined') {
+                    var pathName = document.location.origin;
 
-          return isValid;
-        },
-        submitForm() {
-          if (this.validateForm()) {
-            this.isSubmitting = true;
+                    return pathName;
+                }
+                return '';
+            },
 
-            axios.post('http://localhost:8012/authenticate', {
-              username: this.form.username,
-              password: this.form.password
-            }, {
-              headers: {
-                'Content-Type': 'application/json'
+            validateForm() {
+
+                const baseURL = this.getContextPath() + "/";
+              console.log("baseURL: "+baseURL);
+              let isValid = true;
+              this.errors = {
+                username: '',
+                password: ''
+              };
+
+              // Email validation
+              if (!this.form.username) {
+                this.errors.username = 'username is required';
+                isValid = false;
               }
-            })
-            .then(response => {
-              this.isSubmitting = false;
-              this.loginSuccess = true;
 
-              // Simulasi delay dan redirect ke halaman lain
-              setTimeout(() => {
-                // Ganti dengan URL dashboard tujuanmu
-                window.location.href = 'http://localhost:8012/index';
-              }, 1500);
-            })
-            .catch(error => {
-              this.isSubmitting = false;
-              if (error.response && error.response.status === 401) {
-                this.errors.password = 'Invalid username or password';
-              } else {
-                alert('Login failed. Please try again later.');
+              // Password validation
+              if (!this.form.password) {
+                this.errors.password = 'Password is required';
+                isValid = false;
+              } else if (this.form.password.length < 6) {
+                this.errors.password = 'Password must be at least 6 characters';
+                isValid = false;
               }
-            });
-          }
-        }
 
-      }
-    });
+              return isValid;
+            },
+            submitForm() {
+              const baseURL = this.getContextPath(); // Define baseURL inside the method
+
+              if (this.validateForm()) {
+                this.isSubmitting = true;
+
+                axios.post(baseURL+'/authenticate', {
+                  username: this.form.username,
+                  password: this.form.password
+                }, {
+                  headers: {
+                    'Content-Type': 'application/json'
+                  }
+                })
+                .then(response => {
+                  this.isSubmitting = false;
+                  this.loginSuccess = true;
+
+                  // Simulasi delay dan redirect ke halaman lain
+                  setTimeout(() => {
+                    // Ganti dengan URL dashboard tujuanmu
+                    window.location.href = 'http://localhost:8012/index';
+                  }, 1500);
+                })
+                .catch(error => {
+                  this.isSubmitting = false;
+                  if (error.response && error.response.status === 401) {
+                    this.errors.password = 'Invalid username or password';
+                  } else {
+                    alert('Login failed. Please try again later.');
+                  }
+                });
+              }
+            }
+
+          }
+        });
 </script>
 </body>
 </html>

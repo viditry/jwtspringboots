@@ -1,6 +1,7 @@
 package com.demo.jwtspringboot;
 
 import io.micrometer.common.util.StringUtils;
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -8,11 +9,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
+@MapperScan("com.demo.jwtspringboot.repository.dao") // <- ini penting!
+@EnableJpaRepositories("com.demo.jwtspringboot.repository.jpa") // untuk JPA
 public class JwtspringbootApplication {
     private static final Logger log = LoggerFactory.getLogger(JwtspringbootApplication.class);
 

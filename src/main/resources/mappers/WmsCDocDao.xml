@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.demo.jwtspringboot.repository.dao.WmsCDocDao">
+    <update id="updateDocNoById" parameterType="Map">
+        update WMS_C_DOC_NO set CURRENT_NO = #{add_count}
+        where DEL = '0' AND
+        DOC_TYPE = #{doc_type}
+        <if test="werks !=null and werks !=''">
+            AND WERKS = #{werks}
+        </if>
+        <if test="werks ==null or werks ==''">
+            AND WERKS is null
+        </if>
+    </update>
+</mapper>

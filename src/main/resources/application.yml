@@ -22,33 +22,34 @@ spring:
           issuer-uri: http://localhost:8080 # URI penerbit JWT (ganti sesuai kebutuhan)
   application:
     name: jwtspringboot
-#  freemarker:
-#    template-loader-path: classpath:/templates/
-#    charset: UTF-8
-#    cache: false
-#    suffix: .html # Suffix untuk template Freemarker
-#    check-template-location: true
-#    content-type: text/html
-#    expose-request-attributes: true
-#    expose-session-attributes: true
-#    expose-spring-macro-helpers: true
-#    request-context-attribute: request
-#    #spring.freemarker.default-encoding=UTF-8
-#    settings:
-#      template_update_delay: 0
-#      number_format: 0.##########
-#      datetime_format: yyyy-MM-dd HH:mm:ss
-#      classic_compatible: true
-#      template_exception_handler: ignore
+  redis:
+    host: 10.9.37.229
+    port: 6379
+    password:  # Set if your Redis requires authentication
+    database: 14  # Default DB index
+    ssl: false
 
+mybatis-plus:
+  mapper-locations: classpath:/mappers/**/*.xml
+  type-aliases-package: com.demo.jwtspringboot.model.dao
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: input
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 jwt:
   secret: Kmi7oHVHyZ35KYEDatmO0jZ5SRuuhJLAcwsQycsgF8g= # Kunci rahasia JWT (ganti dengan kunci yang lebih aman)
   expiration: 3600000 # Waktu kedaluwarsa token JWT (dalam milidetik)
 
 logging:
   level:
-    root: INFO # Level logging root
-    com.demo: DEBUG # Level logging untuk package com.example
+    root: DEBUG # Level logging root
+    com:
+      demo: DEBUG # Level logging untuk package com.example
+    org:
+      springframework: DEBUG
 
 management:
   endpoints:

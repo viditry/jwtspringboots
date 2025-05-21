@@ -1,7 +1,7 @@
 package com.demo.jwtspringboot.service;
 
 import com.demo.jwtspringboot.model.User;
-import com.demo.jwtspringboot.repository.UserRepository;
+import com.demo.jwtspringboot.repository.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
